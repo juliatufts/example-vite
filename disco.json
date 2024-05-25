@@ -3,7 +3,8 @@
     "services": {
         "web": {
             "type": "static",
-            "command": "npm run build"
+            "command": "npm run build",
+            "publicPath": "/dist"
         }
     }
 }
