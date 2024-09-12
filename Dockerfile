@@ -9,4 +9,4 @@ RUN npm install
 
 # copy rest and build
 COPY . /code/.
-RUN npm run build
+RUN --mount=type=secret,id=.env env $(cat /run/secrets/.env | xargs) npm run build
