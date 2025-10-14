@@ -26,7 +26,7 @@ function App() {
         method: "POST",
         body: JSON.stringify({ text: formData.get("text") }),
         credentials: "include",
-        headers: { "X-CSRF-Token": token },
+        headers: { "X-CSRF-Token": token, "Content-Type": "application/json" },
       });
 
       if (!response.ok) {
@@ -49,6 +49,7 @@ function App() {
       </div>
       <div>
         <form onSubmit={onSubmit}>
+          <label htmlFor="text">Text to print:</label>
           <textarea
             id="text"
             name="text"
@@ -56,7 +57,7 @@ function App() {
             cols={33}
             defaultValue={defaultText}
           ></textarea>
-          <button type="submit">Submit</button>
+          <button type="submit">Print</button>
         </form>
       </div>
     </>
