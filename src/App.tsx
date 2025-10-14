@@ -14,6 +14,7 @@ function App() {
       const response = await fetch(endpoint, {
         method: "POST",
         body: JSON.stringify({ text: formData.get("text") }),
+        credentials: "include",
       });
 
       if (!response.ok) {
