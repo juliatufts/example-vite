@@ -45,7 +45,7 @@ form label {
 button {
   display: block;
   border-radius: 8px;
-  border: 3px solid white;
+  border: 2px solid white;
   padding: 0.6em 1.2em;
   margin-top: 8px;
   font-size: 1em;
@@ -73,6 +73,6 @@ button:focus-visible {
   }
   button {
     background-color: #c6c6c6;
-    border: 3px solid transparent;
+    border: 2px solid transparent;
   }
 }
