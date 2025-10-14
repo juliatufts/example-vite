@@ -45,19 +45,30 @@ function App() {
       <div className="card">
         <img src={ollie} className="logo" alt="Octopus logo" />
       </div>
-      <div>
-        <form onSubmit={onSubmit}>
-          <label htmlFor="text">Text to print:</label>
-          <textarea
-            id="text"
-            name="text"
-            rows={5}
-            cols={33}
-            defaultValue={defaultText}
-          ></textarea>
-          <button type="submit">Print</button>
-        </form>
-      </div>
+      {token ? (
+        <div>
+          <form onSubmit={onSubmit}>
+            <label htmlFor="text">Text to print:</label>
+            <textarea
+              id="text"
+              name="text"
+              rows={5}
+              cols={33}
+              defaultValue={defaultText}
+            ></textarea>
+            <button type="submit">Print</button>
+          </form>
+        </div>
+      ) : (
+        <div>
+          <p>
+            you are not authenticated.{" "}
+            <a href="https://receipt.recurse.com/login" target="_blank">
+              log in via recurse.com
+            </a>
+          </p>
+        </div>
+      )}
     </>
   );
 }
