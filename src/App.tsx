@@ -1,9 +1,20 @@
 import ollie from "./assets/ollie.png";
 import "./App.css";
 
+function getCookieValue(cookie: string): string {
+  return (
+    cookie
+      .split("; ")
+      .find((row) => row.startsWith("receipt_csrf="))
+      ?.split("=")[1] || ""
+  );
+}
+
 function App() {
   const defaultText = "hello printer";
   const endpoint = "https://receipt.recurse.com/text";
+  const token = getCookieValue(document.cookie);
+  console.log("token: " + token);
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
@@ -15,6 +26,7 @@ function App() {
         method: "POST",
         body: JSON.stringify({ text: formData.get("text") }),
         credentials: "include",
+        headers: { "X-CSRF-Token": token },
       });
 
       if (!response.ok) {
