@@ -1,3 +1,5 @@
-# Example disco Vite Site
+# Vite Receipt
 
-[See the documentation here](https://docs.letsdisco.dev/deployment-guides/vite)
+A quick way to send text to the printer.
+
+[Receipt Printer Docs](https://github.com/recursecenter/wiki/wiki/Receipt-Printer)

@@ -14,12 +14,10 @@ function App() {
   const defaultText = "hello printer";
   const endpoint = "https://receipt.recurse.com/text";
   const token = getCookieValue(document.cookie);
-  console.log("token: " + token);
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
     var formData = new FormData(e.target);
-    console.log(formData.get("text"));
 
     try {
       const response = await fetch(endpoint, {
