@@ -18,16 +18,20 @@ function App() {
   const onSubmit = async (e: any) => {
     e.preventDefault();
     var formData = new FormData(e.target);
+
+    // for testing
     for (const pair of formData.entries()) {
       console.log(pair[0], pair[1]);
     }
 
-    return;
+    // TODO: add text options to data
+    // font, bold, upside-down, invert
+    const data = { text: formData.get("text") };
 
     try {
       const response = await fetch(endpoint, {
         method: "POST",
-        body: JSON.stringify({ text: formData.get("text") }),
+        body: JSON.stringify(data),
         credentials: "include",
         headers: { "X-CSRF-Token": token, "Content-Type": "application/json" },
       });
