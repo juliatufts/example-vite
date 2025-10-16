@@ -1,5 +1,6 @@
 import ollie from "./assets/ollie.png";
 import "./App.css";
+import Editor from "./components/Editor";
 
 function getCookieValue(cookie: string): string {
   return (
@@ -11,13 +12,17 @@ function getCookieValue(cookie: string): string {
 }
 
 function App() {
-  const defaultText = "hello printer";
   const endpoint = "https://receipt.recurse.com/text";
-  const token = getCookieValue(document.cookie);
+  const token = getCookieValue(document.cookie) || "TESTINGTOKEN";
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
     var formData = new FormData(e.target);
+    for (const pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
+
+    return;
 
     try {
       const response = await fetch(endpoint, {
@@ -42,23 +47,11 @@ function App() {
   return (
     <>
       <h1>Vite Receipt</h1>
-      <div className="card">
+      <div className="card flex justify-center">
         <img src={ollie} className="logo" alt="Octopus logo" />
       </div>
       {token ? (
-        <div>
-          <form onSubmit={onSubmit}>
-            <label htmlFor="text">Text to print:</label>
-            <textarea
-              id="text"
-              name="text"
-              rows={5}
-              cols={33}
-              defaultValue={defaultText}
-            ></textarea>
-            <button type="submit">Print</button>
-          </form>
-        </div>
+        <Editor onFormSubmit={onSubmit} />
       ) : (
         <div>
           <p>
