@@ -1,6 +1,6 @@
 import ollie from "./assets/ollie.png";
 import "./App.css";
-import Editor from "./components/Editor";
+import { Form } from "./components/Form";
 
 function getCookieValue(cookie: string): string {
   return (
@@ -23,10 +23,8 @@ function App() {
     for (const pair of formData.entries()) {
       console.log(pair[0], pair[1]);
     }
-
-    // TODO: add text options to data
-    // font, bold, upside-down, invert
     const data = { text: formData.get("text") };
+    return;
 
     try {
       const response = await fetch(endpoint, {
@@ -50,12 +48,16 @@ function App() {
 
   return (
     <>
-      <h1>Vite Receipt</h1>
-      <div className="card flex justify-center">
-        <img src={ollie} className="logo" alt="Octopus logo" />
+      <h1 className="text-center">Text Receipt</h1>
+      <div className="flex justify-center py-4 ">
+        <img
+          src={ollie}
+          className="h-16 w-16 m-8"
+          alt="Octopus emoji expressing excitement"
+        />
       </div>
       {token ? (
-        <Editor onFormSubmit={onSubmit} />
+        <Form onFormSubmit={onSubmit} />
       ) : (
         <div>
           <p>
