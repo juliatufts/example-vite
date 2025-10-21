@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { Dispatch, SetStateAction, useRef } from "react";
 import cn from "classnames";
 import { TextEditorProps } from ".";
 import { TextEditorOptions, TextStyles } from "../TextEditorOptions";
@@ -7,6 +7,66 @@ const initialStyles: TextStyles = {
   "font-bold": false,
   "text-sm": false,
 };
+
+function updateStyles(
+  targetId: string,
+  isChecked: boolean,
+  setTextStyles: Dispatch<SetStateAction<TextStyles>>
+) {
+  switch (targetId) {
+    case "font-a":
+      if (isChecked) {
+        setTextStyles((prev) => ({ ...prev, "text-sm": false }));
+      }
+      break;
+    case "font-b":
+      if (isChecked) {
+        setTextStyles((prev) => ({ ...prev, "text-sm": true }));
+      }
+      break;
+    case "letterSpacing":
+      // TODO: handle letter spacing separately
+      break;
+    case "bold":
+      if (isChecked) {
+        setTextStyles((prev) => ({ ...prev, "font-bold": true }));
+      } else {
+        setTextStyles((prev) => ({ ...prev, "font-bold": false }));
+      }
+      break;
+    case "underline":
+      if (isChecked) {
+        setTextStyles((prev) => ({ ...prev, underline: true }));
+      } else {
+        setTextStyles((prev) => ({ ...prev, underline: false }));
+      }
+      break;
+    case "strike":
+      if (isChecked) {
+        setTextStyles((prev) => ({ ...prev, "line-through": true }));
+      } else {
+        setTextStyles((prev) => ({ ...prev, "line-through": false }));
+      }
+      break;
+    case "invert":
+      if (isChecked) {
+        setTextStyles((prev) => ({
+          ...prev,
+          "text-white": true,
+          "bg-black": true,
+        }));
+      } else {
+        setTextStyles((prev) => ({
+          ...prev,
+          "text-white": false,
+          "bg-black": false,
+        }));
+      }
+      break;
+    default:
+      break;
+  }
+}
 
 /**
  * Main editor component with textarea and options
@@ -25,46 +85,7 @@ function TextEditor({ id }: TextEditorProps) {
     const targetId = target.id.slice(id.length + 1); // Remove id prefix
     const checkbox = target as HTMLInputElement;
 
-    switch (targetId) {
-      case "font-a":
-        if (checkbox.checked) {
-          setTextStyles((prev) => ({ ...prev, "text-sm": false }));
-          setMaxLineLength(42);
-          setLog(`Max line length set to ${42}`);
-        }
-        break;
-      case "font-b":
-        if (checkbox.checked) {
-          setTextStyles((prev) => ({ ...prev, "text-sm": true }));
-          setMaxLineLength(72);
-          setLog(`Max line length set to ${72}`);
-        }
-        break;
-      case "bold":
-        if (checkbox.checked) {
-          setTextStyles((prev) => ({ ...prev, "font-bold": true }));
-        } else {
-          setTextStyles((prev) => ({ ...prev, "font-bold": false }));
-        }
-        break;
-      case "invert":
-        if (checkbox.checked) {
-          setTextStyles((prev) => ({
-            ...prev,
-            "text-white": true,
-            "bg-black": true,
-          }));
-        } else {
-          setTextStyles((prev) => ({
-            ...prev,
-            "text-white": false,
-            "bg-black": false,
-          }));
-        }
-        break;
-      default:
-        break;
-    }
+    updateStyles(targetId, checkbox.checked, setTextStyles);
   }
 
   function updateSelection(
@@ -93,7 +114,7 @@ function TextEditor({ id }: TextEditorProps) {
               textOptionStyles
             )}
             id={`${id}-text`}
-            name="text"
+            name={`${id}-text`}
             rows={4}
             cols={45}
             defaultValue={fortyTwo}

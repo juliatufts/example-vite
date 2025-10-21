@@ -2,55 +2,33 @@ import { useContext } from "react";
 import { FormContext } from "../Form/Form";
 import Button from "../Button";
 
-function swapArrayElements<T>(arr: T[], index1: number, index2: number): T[] {
-  const newArr = [...arr];
-  const temp = newArr[index1];
-  newArr[index1] = newArr[index2];
-  newArr[index2] = temp;
-  return newArr;
-}
+/**
+ * TODO: Character Commands options for
+ * - character size
+ *   - width/height scaling: 1-8x
+ * - underline (ESC -)
+ *   - 1 dot or 2 dots thick
+ * - double strike (ESC G)
+ * - special fonts? (ESC M)
+ *   - A-E, special A-B
+ * - 90 degree clockwise rotation (ESC V)
+ *
+ * Also: line spacing, spacing (ESC SP)
+ */
 
 /**
  * Options for the text editor: font selection, bold, etc.
  */
 function TextEditorOptions({ id }: { id: string }) {
-  const { textBlocks, setTextBlocks } = useContext(FormContext);
+  const {
+    textBlocks,
+    addTextBlock,
+    removeTextBlock,
+    moveBlockDown,
+    moveBlockUp,
+  } = useContext(FormContext);
   const index = textBlocks.findIndex((b) => b.id === id);
   const isTheOnlyBlock = textBlocks.length === 1 && index === 0;
-
-  function addTextBlock(e: React.MouseEvent<HTMLButtonElement>) {
-    setTextBlocks((prev) => {
-      const newBlocks = [...prev];
-      newBlocks.splice(index + 1, 0, {
-        id: crypto.randomUUID().split("-")[0],
-        content: "",
-        styles: {},
-      });
-      return newBlocks;
-    });
-  }
-
-  function removeTextBlock() {
-    setTextBlocks((prev) => {
-      const newBlocks = [...prev];
-      newBlocks.splice(index, 1);
-      return newBlocks;
-    });
-  }
-
-  function moveDown() {
-    setTextBlocks((prev) => {
-      const newBlocks = swapArrayElements(prev, index, index + 1);
-      return newBlocks;
-    });
-  }
-
-  function moveUp() {
-    setTextBlocks((prev) => {
-      const newBlocks = swapArrayElements(prev, index, index - 1);
-      return newBlocks;
-    });
-  }
 
   return (
     <div className="text-left">
@@ -64,7 +42,7 @@ function TextEditorOptions({ id }: { id: string }) {
               type="radio"
               name={`${id}-font`}
               id={`${id}-font-a`}
-              value="font-a"
+              value="a"
               defaultChecked
             />
             <label htmlFor={`${id}-font-a`}>Font A</label>
@@ -75,11 +53,52 @@ function TextEditorOptions({ id }: { id: string }) {
               type="radio"
               name={`${id}-font`}
               id={`${id}-font-b`}
-              value="font-b"
+              value="b"
             />
             <label htmlFor={`${id}-font-b`}>Font B</label>
           </div>
         </fieldset>
+        <div className="my-2">
+          <label htmlFor={`${id}-letterSpacing`} className="mr-2">
+            Letter Spacing:
+          </label>
+          <input
+            type="number"
+            min={0}
+            max={255}
+            id={`${id}-letterSpacing`}
+            name={`${id}-letterSpacing`}
+            className="w-16 border border-gray-300 rounded-md p-1"
+          />
+        </div>
+        <div className="my-2 flex gap-4">
+          <div>
+            <label htmlFor={`${id}-scaleWidth`} className="mr-2">
+              Scale width:
+            </label>
+            <input
+              type="number"
+              min={0}
+              max={7}
+              id={`${id}-scaleWidth`}
+              name={`${id}-scaleWidth`}
+              className="w-16 border border-gray-300 rounded-md p-1"
+            />
+          </div>
+          <div>
+            <label htmlFor={`${id}-scaleHeight`} className="mr-2">
+              Scale height:
+            </label>
+            <input
+              type="number"
+              min={0}
+              max={7}
+              id={`${id}-scaleHeight`}
+              name={`${id}-scaleHeight`}
+              className="w-16 border border-gray-300 rounded-md p-1"
+            />
+          </div>
+        </div>
         <div className="flex gap-2">
           <h4>Styles:</h4>
           <div className="flex flex-wrap gap-3">
@@ -96,10 +115,28 @@ function TextEditorOptions({ id }: { id: string }) {
               <input
                 className="mr-2"
                 type="checkbox"
-                id={`${id}-upside-down`}
-                name={`${id}-upside-down`}
+                id={`${id}-underline`}
+                name={`${id}-underline`}
               />
-              <label htmlFor={`${id}-upside-down`}>Upside Down</label>
+              <label htmlFor={`${id}-underline`}>Underline</label>
+            </div>
+            <div>
+              <input
+                className="mr-2"
+                type="checkbox"
+                id={`${id}-strike`}
+                name={`${id}-strike`}
+              />
+              <label htmlFor={`${id}-underline`}>Strikethrough</label>
+            </div>
+            <div>
+              <input
+                className="mr-2"
+                type="checkbox"
+                id={`${id}-upsideDown`}
+                name={`${id}-upsideDown`}
+              />
+              <label htmlFor={`${id}-upsideDown`}>Upside Down</label>
             </div>
             <div>
               <input
@@ -110,6 +147,15 @@ function TextEditorOptions({ id }: { id: string }) {
               />
               <label htmlFor={`${id}-invert`}>Invert Color</label>
             </div>
+            <div>
+              <input
+                className="mr-2"
+                type="checkbox"
+                id={`${id}-rotate`}
+                name={`${id}-rotate`}
+              />
+              <label htmlFor={`${id}-rotate`}>Rotate 90</label>
+            </div>
             {/* <div>
         <input className="mr-2" type="checkbox" id="scale" name="scale" />
         <label htmlFor="scale">Double Size (H+V)</label>
@@ -118,18 +164,26 @@ function TextEditorOptions({ id }: { id: string }) {
         </div>
       </div>
       <div className="flex gap-2 mt-2">
-        <Button type="button" onClick={addTextBlock} variant="secondary">
+        <Button
+          type="button"
+          onClick={() => addTextBlock(index)}
+          variant="secondary"
+        >
           Add new block
         </Button>
         {!isTheOnlyBlock && (
-          <Button type="button" onClick={removeTextBlock} variant="danger">
+          <Button
+            type="button"
+            onClick={() => removeTextBlock(index)}
+            variant="danger"
+          >
             Remove block
           </Button>
         )}
         {textBlocks.length > 0 && index < textBlocks.length - 1 && (
           <Button
             type="button"
-            onClick={moveDown}
+            onClick={() => moveBlockDown(index)}
             variant="secondary"
             aria-label="move block down"
           >
@@ -139,7 +193,7 @@ function TextEditorOptions({ id }: { id: string }) {
         {textBlocks.length > 0 && index > 0 && (
           <Button
             type="button"
-            onClick={moveUp}
+            onClick={() => moveBlockUp(index)}
             variant="secondary"
             aria-label="move block up"
           >

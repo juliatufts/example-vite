@@ -12,19 +12,47 @@ function getCookieValue(cookie: string): string {
 }
 
 function App() {
-  const endpoint = "https://receipt.recurse.com/text";
-  const token = getCookieValue(document.cookie) || "TESTINGTOKEN";
+  let endpoint = "https://receipt.recurse.com/text";
+
+  if (import.meta.env.DEV) {
+    document.cookie = "receipt_csrf=dev_token; path=/";
+    endpoint = "http://localhost:3000/text";
+  }
+  const token = getCookieValue(document.cookie);
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
     var formData = new FormData(e.target);
 
     // for testing
+    let lastId = "";
+    const blockMap = new Map();
     for (const pair of formData.entries()) {
       console.log(pair[0], pair[1]);
+      const [id, optionName] = pair[0].split("-", 2);
+      lastId = id;
+      if (blockMap.has(id)) {
+        const options = blockMap.get(id);
+        blockMap.set(id, { ...options, [optionName]: pair[1] });
+      } else {
+        blockMap.set(id, { [optionName]: pair[1] });
+      }
     }
-    const data = { text: formData.get("text") };
-    return;
+
+    const blockInfo = blockMap.get(lastId); // testing
+    const data = {
+      text: blockInfo.text,
+      underline: !!blockInfo.underline,
+      bold: !!blockInfo.bold,
+      font: blockInfo.font,
+      upsideDown: !!blockInfo.upsideDown,
+      invert: !!blockInfo.invert,
+      rotate: !!blockInfo.rotate,
+      spacing: Number(blockInfo.letterSpacing),
+      scaleWidth: Number(blockInfo.scaleWidth),
+      scaleHeight: Number(blockInfo.scaleHeight),
+    };
+    console.log(data);
 
     try {
       const response = await fetch(endpoint, {
