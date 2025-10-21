@@ -72,13 +72,13 @@ function updateStyles(
  * Main editor component with textarea and options
  */
 function TextEditor({ id }: TextEditorProps) {
-  const [maxLineLength, setMaxLineLength] = React.useState<number>(42);
-  const [log, setLog] = React.useState<string | null>(null);
+  // const [maxLineLength, setMaxLineLength] = React.useState<number>(42);
+  // const [log, setLog] = React.useState<string | null>(null);
   const [textOptionStyles, setTextStyles] =
     React.useState<TextStyles>(initialStyles);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const defaultText = "hello printer";
-  const fortyTwo = "123456789012345678901234567890123456789012";
+  // const fortyTwo = "123456789012345678901234567890123456789012";
 
   function onFormChange(e: React.FormEvent<HTMLFormElement>) {
     const target = e.target as HTMLElement;
@@ -88,15 +88,15 @@ function TextEditor({ id }: TextEditorProps) {
     updateStyles(targetId, checkbox.checked, setTextStyles);
   }
 
-  function updateSelection(
-    e:
-      | React.MouseEvent<HTMLTextAreaElement>
-      | React.KeyboardEvent<HTMLTextAreaElement>
-  ) {
-    const start = textAreaRef.current?.selectionStart;
-    const end = textAreaRef.current?.selectionEnd;
-    setLog(`Selected text from ${start} to ${end}`);
-  }
+  // function updateSelection(
+  //   e:
+  //     | React.MouseEvent<HTMLTextAreaElement>
+  //     | React.KeyboardEvent<HTMLTextAreaElement>
+  // ) {
+  //   const start = textAreaRef.current?.selectionStart;
+  //   const end = textAreaRef.current?.selectionEnd;
+  //   setLog(`Selected text from ${start} to ${end}`);
+  // }
 
   return (
     <section onChange={onFormChange}>
@@ -117,9 +117,9 @@ function TextEditor({ id }: TextEditorProps) {
             name={`${id}-text`}
             rows={4}
             cols={45}
-            defaultValue={fortyTwo}
-            onKeyUp={updateSelection}
-            onClick={updateSelection}
+            defaultValue={defaultText}
+            // onKeyUp={updateSelection}
+            // onClick={updateSelection}
             ref={textAreaRef}
           />
           {/* {log && <p className="font-bold">{log}</p>} */}
