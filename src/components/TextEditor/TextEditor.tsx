@@ -117,7 +117,7 @@ function TextEditor({ id }: TextEditorProps) {
             )}
             id={`${id}-text`}
             name={`${id}-text`}
-            rows={4}
+            rows={3}
             cols={45}
             defaultValue={defaultText}
             ref={textAreaRef}
