@@ -10,22 +10,35 @@ const initialStyles: TextStyles = {
 
 function updateStyles(
   targetId: string,
-  isChecked: boolean,
+  input: HTMLInputElement,
   setTextStyles: Dispatch<SetStateAction<TextStyles>>
 ) {
+  const isChecked = input.checked;
   switch (targetId) {
     case "font-a":
       if (isChecked) {
-        setTextStyles((prev) => ({ ...prev, "text-sm": false }));
+        setTextStyles((prev) => ({ ...prev, "text-xs": false }));
       }
       break;
     case "font-b":
       if (isChecked) {
-        setTextStyles((prev) => ({ ...prev, "text-sm": true }));
+        setTextStyles((prev) => ({ ...prev, "text-xs": true }));
       }
       break;
     case "letterSpacing":
-      // TODO: handle letter spacing separately
+      console.log("update letter spacing:", input.value);
+      setTextStyles((prev) => {
+        const oldStyleKey = Object.keys(prev).filter((key) =>
+          key.startsWith("tracking-")
+        );
+        if (oldStyleKey.length > 0) {
+          delete prev[oldStyleKey[0]];
+        }
+        return {
+          ...prev,
+          [`tracking-[${input.value}px]`]: true,
+        };
+      });
       break;
     case "bold":
       if (isChecked) {
@@ -72,31 +85,20 @@ function updateStyles(
  * Main editor component with textarea and options
  */
 function TextEditor({ id }: TextEditorProps) {
-  // const [maxLineLength, setMaxLineLength] = React.useState<number>(42);
-  // const [log, setLog] = React.useState<string | null>(null);
   const [textOptionStyles, setTextStyles] =
     React.useState<TextStyles>(initialStyles);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const defaultText = "hello printer";
   // const fortyTwo = "123456789012345678901234567890123456789012";
+  // const fiftySix = "12345678901234567890123456789012345678901234567890123456";
 
   function onFormChange(e: React.FormEvent<HTMLFormElement>) {
     const target = e.target as HTMLElement;
-    const targetId = target.id.slice(id.length + 1); // Remove id prefix
-    const checkbox = target as HTMLInputElement;
+    const targetId = target.id.slice(id.length + 1); // remove editor id prefix
+    const input = target as HTMLInputElement;
 
-    updateStyles(targetId, checkbox.checked, setTextStyles);
+    updateStyles(targetId, input, setTextStyles);
   }
-
-  // function updateSelection(
-  //   e:
-  //     | React.MouseEvent<HTMLTextAreaElement>
-  //     | React.KeyboardEvent<HTMLTextAreaElement>
-  // ) {
-  //   const start = textAreaRef.current?.selectionStart;
-  //   const end = textAreaRef.current?.selectionEnd;
-  //   setLog(`Selected text from ${start} to ${end}`);
-  // }
 
   return (
     <section onChange={onFormChange}>
@@ -118,11 +120,8 @@ function TextEditor({ id }: TextEditorProps) {
             rows={4}
             cols={45}
             defaultValue={defaultText}
-            // onKeyUp={updateSelection}
-            // onClick={updateSelection}
             ref={textAreaRef}
           />
-          {/* {log && <p className="font-bold">{log}</p>} */}
         </div>
         <TextEditorOptions id={id} />
       </div>

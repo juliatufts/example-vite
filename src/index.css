@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@source inline("tracking-[{0..255..1}px]");
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
