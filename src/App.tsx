@@ -2,6 +2,20 @@ import ollie from "./assets/ollie.png";
 import "./App.css";
 import { Form } from "./components/Form";
 
+interface TextReceiptData {
+  text?: string;
+  underline?: boolean;
+  bold?: boolean;
+  font?: "a" | "b";
+  upsideDown?: boolean;
+  invert?: boolean;
+  rotate?: boolean;
+  letterSpacing?: number;
+  scaleWidth?: number;
+  scaleHeight?: number;
+  concat?: string;
+}
+
 function getCookieValue(cookie: string): string {
   return (
     cookie
@@ -12,34 +26,36 @@ function getCookieValue(cookie: string): string {
 }
 
 function App() {
-  let endpoint = "https://receipt.recurse.com/text";
+  let endpoint = "https://receipt.recurse.com/textblocks";
 
   if (import.meta.env.DEV) {
     document.cookie = "receipt_csrf=dev_token; path=/";
-    endpoint = "http://localhost:3000/text";
+    endpoint = "http://localhost:3000/textblocks";
   }
   const token = getCookieValue(document.cookie);
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
     var formData = new FormData(e.target);
+    let currentId = "";
+    let currentOptions = {};
+    const blocks: TextReceiptData[] = [];
 
-    // for testing
-    let lastId = "";
-    const blockMap = new Map();
     for (const pair of formData.entries()) {
       console.log(pair[0], pair[1]);
       const [id, optionName] = pair[0].split("-", 2);
-      lastId = id;
-      if (blockMap.has(id)) {
-        const options = blockMap.get(id);
-        blockMap.set(id, { ...options, [optionName]: pair[1] });
+      if (currentId === id) {
+        currentOptions = { ...currentOptions, [optionName]: pair[1] };
       } else {
-        blockMap.set(id, { [optionName]: pair[1] });
+        if (Object.keys(currentOptions).length > 0) blocks.push(currentOptions);
+        currentOptions = { [optionName]: pair[1] };
+        currentId = id;
       }
     }
+    currentOptions = { ...currentOptions, concat: "cut" };
+    blocks.push(currentOptions);
 
-    const blockInfo = blockMap.get(lastId); // testing
+    const blockInfo = blocks[blocks.length - 1];
     const data = {
       text: blockInfo.text,
       underline: !!blockInfo.underline,
@@ -51,13 +67,14 @@ function App() {
       spacing: Number(blockInfo.letterSpacing),
       scaleWidth: Number(blockInfo.scaleWidth),
       scaleHeight: Number(blockInfo.scaleHeight),
+      concat: blockInfo.concat,
     };
     console.log(data);
 
     try {
       const response = await fetch(endpoint, {
         method: "POST",
-        body: JSON.stringify(data),
+        body: JSON.stringify({ textblocks: blocks }),
         credentials: "include",
         headers: { "X-CSRF-Token": token, "Content-Type": "application/json" },
       });
