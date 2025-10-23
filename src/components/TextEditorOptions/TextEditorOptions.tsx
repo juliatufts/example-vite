@@ -84,6 +84,7 @@ function TextEditorOptions({ id }: { id: string }) {
               </label>
               <input
                 type="number"
+                defaultValue={0}
                 min={0}
                 max={255}
                 id={`${id}-letterSpacing`}
@@ -98,8 +99,9 @@ function TextEditorOptions({ id }: { id: string }) {
                 </label>
                 <input
                   type="number"
-                  min={0}
-                  max={7}
+                  defaultValue={1}
+                  min={1}
+                  max={8}
                   id={`${id}-scaleWidth`}
                   name={`${id}-scaleWidth`}
                   className="w-16 border border-gray-300 rounded-md p-1"
@@ -111,8 +113,9 @@ function TextEditorOptions({ id }: { id: string }) {
                 </label>
                 <input
                   type="number"
-                  min={0}
-                  max={7}
+                  defaultValue={1}
+                  min={1}
+                  max={8}
                   id={`${id}-scaleHeight`}
                   name={`${id}-scaleHeight`}
                   className="w-16 border border-gray-300 rounded-md p-1"

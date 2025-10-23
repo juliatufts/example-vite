@@ -39,42 +39,36 @@ function App() {
     var formData = new FormData(e.target);
     let currentId = "";
     let currentOptions = {};
-    const blocks: TextReceiptData[] = [];
+    const textblocks: TextReceiptData[] = [];
 
+    // batch form data into textblocks grouped by id
     for (const pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
       const [id, optionName] = pair[0].split("-", 2);
+      let optionValue = pair[1];
+
+      // scale is displayed 1-8 for human readability but API expects 0-7 range
+      if (optionName === "scaleWidth" || optionName === "scaleWidth") {
+        optionValue = (Number(optionValue) - 1).toString();
+      }
+
       if (currentId === id) {
-        currentOptions = { ...currentOptions, [optionName]: pair[1] };
+        currentOptions = { ...currentOptions, [optionName]: optionValue };
       } else {
-        if (Object.keys(currentOptions).length > 0) blocks.push(currentOptions);
-        currentOptions = { [optionName]: pair[1] };
+        if (Object.keys(currentOptions).length > 0)
+          textblocks.push(currentOptions);
+        currentOptions = { [optionName]: optionValue };
         currentId = id;
       }
     }
-    currentOptions = { ...currentOptions, concat: "cut" };
-    blocks.push(currentOptions);
 
-    const blockInfo = blocks[blocks.length - 1];
-    const data = {
-      text: blockInfo.text,
-      underline: !!blockInfo.underline,
-      bold: !!blockInfo.bold,
-      font: blockInfo.font,
-      upsideDown: !!blockInfo.upsideDown,
-      invert: !!blockInfo.invert,
-      rotate: !!blockInfo.rotate,
-      spacing: Number(blockInfo.letterSpacing),
-      scaleWidth: Number(blockInfo.scaleWidth),
-      scaleHeight: Number(blockInfo.scaleHeight),
-      concat: blockInfo.concat,
-    };
-    console.log(data);
+    // last text block cuts the paper
+    currentOptions = { ...currentOptions, concat: "cut" };
+    textblocks.push(currentOptions);
 
     try {
       const response = await fetch(endpoint, {
         method: "POST",
-        body: JSON.stringify({ textblocks: blocks }),
+        body: JSON.stringify({ textblocks }),
         credentials: "include",
         headers: { "X-CSRF-Token": token, "Content-Type": "application/json" },
       });
