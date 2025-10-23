@@ -47,7 +47,7 @@ function App() {
       let optionValue = pair[1];
 
       // scale is displayed 1-8 for human readability but API expects 0-7 range
-      if (optionName === "scaleWidth" || optionName === "scaleWidth") {
+      if (optionName === "scaleWidth" || optionName === "scaleHeight") {
         optionValue = (Number(optionValue) - 1).toString();
       }
 
