@@ -3,20 +3,6 @@ import { FormContext } from "../Form/Form";
 import Button from "../Button";
 
 /**
- * TODO: Character Commands options for
- * - character size
- *   - width/height scaling: 1-8x
- * - underline (ESC -)
- *   - 1 dot or 2 dots thick
- * - double strike (ESC G)
- * - special fonts? (ESC M)
- *   - A-E, special A-B
- * - 90 degree clockwise rotation (ESC V)
- *
- * Also: line spacing, spacing (ESC SP)
- */
-
-/**
  * Options for the text editor: font selection, bold, etc.
  */
 function TextEditorOptions({ id }: { id: string }) {
@@ -142,15 +128,6 @@ function TextEditorOptions({ id }: { id: string }) {
                     name={`${id}-underline`}
                   />
                   <label htmlFor={`${id}-underline`}>Underline</label>
-                </div>
-                <div>
-                  <input
-                    className="mr-2"
-                    type="checkbox"
-                    id={`${id}-strike`}
-                    name={`${id}-strike`}
-                  />
-                  <label htmlFor={`${id}-underline`}>Strikethrough</label>
                 </div>
                 <div>
                   <input

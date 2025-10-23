@@ -3,10 +3,7 @@ import cn from "classnames";
 import { TextEditorProps } from ".";
 import { TextEditorOptions, TextStyles } from "../TextEditorOptions";
 
-const initialStyles: TextStyles = {
-  "font-bold": false,
-  "text-sm": false,
-};
+const initialStyles: TextStyles = {};
 
 function updateStyles(
   targetId: string,
@@ -26,7 +23,6 @@ function updateStyles(
       }
       break;
     case "letterSpacing":
-      console.log("update letter spacing:", input.value);
       setTextStyles((prev) => {
         const oldStyleKey = Object.keys(prev).filter((key) =>
           key.startsWith("tracking-")
@@ -52,13 +48,6 @@ function updateStyles(
         setTextStyles((prev) => ({ ...prev, underline: true }));
       } else {
         setTextStyles((prev) => ({ ...prev, underline: false }));
-      }
-      break;
-    case "strike":
-      if (isChecked) {
-        setTextStyles((prev) => ({ ...prev, "line-through": true }));
-      } else {
-        setTextStyles((prev) => ({ ...prev, "line-through": false }));
       }
       break;
     case "invert":
