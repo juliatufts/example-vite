@@ -16,14 +16,14 @@ interface TextReceiptData {
   concat?: string;
 }
 
-function getCookieValue(cookie: string): string {
-  return (
-    cookie
-      .split("; ")
-      .find((row) => row.startsWith("receipt_csrf="))
-      ?.split("=")[1] || ""
-  );
-}
+// function getCookieValue(cookie: string): string {
+//   return (
+//     cookie
+//       .split("; ")
+//       .find((row) => row.startsWith("receipt_csrf="))
+//       ?.split("=")[1] || ""
+//   );
+// }
 
 function App() {
   // let endpoint = "https://receipt.recurse.com/textblocks";
