@@ -33,7 +33,8 @@ function App() {
     document.cookie = "receipt_csrf=dev_token; path=/";
     endpoint = "http://localhost:3000/textblocks";
   }
-  const token = getCookieValue(document.cookie);
+  // const token = getCookieValue(document.cookie);
+  const token = "temp_cookie";
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
