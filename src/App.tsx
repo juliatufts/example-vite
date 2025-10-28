@@ -27,7 +27,7 @@ interface TextReceiptData {
 
 function App() {
   // let endpoint = "https://receipt.recurse.com/textblocks";
-  let endpoint = "https://receipt.local:4000/textblocks";
+  let endpoint = "http://receipt.local:4000/textblocks";
 
   if (import.meta.env.DEV) {
     document.cookie = "receipt_csrf=dev_token; path=/";
@@ -72,7 +72,7 @@ function App() {
         method: "POST",
         body: JSON.stringify({ textblocks }),
         credentials: "include",
-        headers: { "X-CSRF-Token": token, "Content-Type": "application/json" },
+        // headers: { "X-CSRF-Token": token, "Content-Type": "application/json" },
       });
 
       if (!response.ok) {
