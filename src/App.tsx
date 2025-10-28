@@ -103,8 +103,7 @@ function App() {
         <div>
           <p>
             you are not authenticated.{" "}
-            {/* <a href="https://receipt.recurse.com/login?redirect_uri=https://receipt-text.recurse.com"> */}
-            <a href="https://receipt.recurse.com/login">
+            <a href="https://receipt.recurse.com/login?redirect_uri=https://receipt-text.recurse.com">
               log in to receipt printer API
             </a>
           </p>
