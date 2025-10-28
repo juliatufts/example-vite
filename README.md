@@ -1,4 +1,4 @@
-# Vite Receipt
+# Receipt Text
 
 A quick way to send text to the printer.
 

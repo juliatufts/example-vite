@@ -26,7 +26,8 @@ function getCookieValue(cookie: string): string {
 }
 
 function App() {
-  let endpoint = "https://receipt.recurse.com/textblocks";
+  // let endpoint = "https://receipt.recurse.com/textblocks";
+  let endpoint = "https://receipt.local:4000/textblocks";
 
   if (import.meta.env.DEV) {
     document.cookie = "receipt_csrf=dev_token; path=/";
@@ -86,8 +87,8 @@ function App() {
   };
 
   return (
-    <>
-      <h1 className="text-center">Text Receipt</h1>
+    <div>
+      <h1 className="text-center">Receipt Text</h1>
       <div className="flex justify-center py-4 ">
         <img
           src={ollie}
@@ -107,7 +108,7 @@ function App() {
           </p>
         </div>
       )}
-    </>
+    </div>
   );
 }
 
