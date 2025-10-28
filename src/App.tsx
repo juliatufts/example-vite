@@ -16,25 +16,25 @@ interface TextReceiptData {
   concat?: string;
 }
 
-// function getCookieValue(cookie: string): string {
-//   return (
-//     cookie
-//       .split("; ")
-//       .find((row) => row.startsWith("receipt_csrf="))
-//       ?.split("=")[1] || ""
-//   );
-// }
+function getCookieValue(cookie: string): string {
+  return (
+    cookie
+      .split("; ")
+      .find((row) => row.startsWith("receipt_csrf="))
+      ?.split("=")[1] || ""
+  );
+}
 
 function App() {
-  // let endpoint = "https://receipt.recurse.com/textblocks";
-  let endpoint = "http://receipt.local:4000/textblocks";
+  let endpoint = "https://receipt.recurse.com/textblocks";
+  // let endpoint = "http://receipt.local:4000/textblocks";
 
   if (import.meta.env.DEV) {
     document.cookie = "receipt_csrf=dev_token; path=/";
     endpoint = "http://localhost:3000/textblocks";
   }
-  // const token = getCookieValue(document.cookie);
-  const token = "temp_cookie";
+  const token = getCookieValue(document.cookie);
+  // const token = "temp_cookie";
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
@@ -72,7 +72,7 @@ function App() {
         method: "POST",
         body: JSON.stringify({ textblocks }),
         credentials: "include",
-        // headers: { "X-CSRF-Token": token, "Content-Type": "application/json" },
+        headers: { "X-CSRF-Token": token, "Content-Type": "application/json" },
       });
 
       if (!response.ok) {
@@ -103,7 +103,8 @@ function App() {
         <div>
           <p>
             you are not authenticated.{" "}
-            <a href="https://receipt.recurse.com/login?redirect_uri=https://receipt-text.recurse.com">
+            {/* <a href="https://receipt.recurse.com/login?redirect_uri=https://receipt-text.recurse.com"> */}
+            <a href="https://receipt.recurse.com/login?redirect_uri=https://receipt-text.vercel.app/">
               log in to receipt printer API
             </a>
           </p>
