@@ -1,6 +1,7 @@
 import ollie from "./assets/ollie.png";
 import "./App.css";
 import { Form } from "./components/Form";
+import Anchor from "./components/Anchor/Anchor";
 
 interface TextReceiptData {
   text?: string;
@@ -90,6 +91,9 @@ function App() {
   return (
     <div>
       <h1 className="text-center">Receipt Text</h1>
+      <p className="text-center">
+        A simple text editor for the receipt printer.
+      </p>
       <div className="flex justify-center py-4 ">
         <img
           src={ollie}
@@ -109,6 +113,12 @@ function App() {
           </p>
         </div>
       )}
+      <footer className="flex justify-between mt-24 ">
+        <Anchor href="https://github.com/juliatufts/receipt-text">
+          View project on GitHub
+        </Anchor>
+        <Anchor href="https://receipt.recurse.com/">Receipt Printer API</Anchor>
+      </footer>
     </div>
   );
 }

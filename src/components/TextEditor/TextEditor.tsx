@@ -3,7 +3,10 @@ import cn from "classnames";
 import { TextEditorProps } from ".";
 import { TextEditorOptions, TextStyles } from "../TextEditorOptions";
 
-const initialStyles: TextStyles = {};
+const initialStyles: TextStyles = {
+  "dark:bg-white": true,
+  "dark:text-black": true,
+};
 
 function updateStyles(
   targetId: string,
@@ -50,18 +53,29 @@ function updateStyles(
         setTextStyles((prev) => ({ ...prev, underline: false }));
       }
       break;
+    case "upsideDown":
+      if (isChecked) {
+        setTextStyles((prev) => ({ ...prev, "rotate-180": true }));
+      } else {
+        setTextStyles((prev) => ({ ...prev, "rotate-180": false }));
+      }
+      break;
     case "invert":
       if (isChecked) {
         setTextStyles((prev) => ({
           ...prev,
           "text-white": true,
           "bg-black": true,
+          "dark:bg-white": false,
+          "dark:text-black": false,
         }));
       } else {
         setTextStyles((prev) => ({
           ...prev,
           "text-white": false,
           "bg-black": false,
+          "dark:bg-white": true,
+          "dark:text-black": true,
         }));
       }
       break;
@@ -78,8 +92,6 @@ function TextEditor({ id }: TextEditorProps) {
     React.useState<TextStyles>(initialStyles);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const defaultText = "hello printer";
-  // const fortyTwo = "123456789012345678901234567890123456789012";
-  // const fiftySix = "12345678901234567890123456789012345678901234567890123456";
 
   function onFormChange(e: React.FormEvent<HTMLFormElement>) {
     const target = e.target as HTMLElement;
