@@ -92,14 +92,20 @@ function App() {
     <div>
       <h1 className="text-center">Receipt Text</h1>
       <p className="text-center">
-        A simple text editor for the receipt printer.
+        A simple text editor for the RC receipt printer.
       </p>
       <div className="flex justify-center py-4 ">
         <img
           src={ollie}
-          className="h-16 w-16 m-8"
+          className="h-16 w-16 m-4"
           alt="Octopus emoji expressing excitement"
         />
+        <div className="max-w-60">
+          <p>
+            Note that the editor preview will likely be slightly different than
+            the actual printed text!
+          </p>
+        </div>
       </div>
       {token ? (
         <Form onFormSubmit={onSubmit} />

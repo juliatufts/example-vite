@@ -6,6 +6,7 @@ import { TextEditorOptions, TextStyles } from "../TextEditorOptions";
 const initialStyles: TextStyles = {
   "dark:bg-white": true,
   "dark:text-black": true,
+  "font-mono": true,
 };
 
 function updateStyles(
@@ -79,6 +80,20 @@ function updateStyles(
         }));
       }
       break;
+    case "rotate":
+      if (isChecked) {
+        setTextStyles((prev) => ({
+          ...prev,
+          "font-mono": false,
+          "font-rotated": true,
+        }));
+      } else {
+        setTextStyles((prev) => ({
+          ...prev,
+          "font-mono": true,
+          "font-rotated": false,
+        }));
+      }
     default:
       break;
   }
@@ -113,7 +128,7 @@ function TextEditor({ id }: TextEditorProps) {
           </label>
           <textarea
             className={cn(
-              "resize-none w-[420px] break-all border border-gray-300 rounded-md p-1 font-mono",
+              "resize-none w-[420px] break-all border border-gray-300 rounded-md p-1",
               textOptionStyles
             )}
             id={`${id}-text`}

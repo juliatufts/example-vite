@@ -1,6 +1,18 @@
 @import "tailwindcss";
 @source inline("tracking-[{0..255..1}px]");
 
+@theme {
+  --font-rotated: "Rotated", sans-serif;
+}
+
+@font-face {
+  font-family: Rotated;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/rotated.otf") format("opentype");
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
