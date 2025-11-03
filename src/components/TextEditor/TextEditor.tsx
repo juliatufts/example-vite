@@ -94,6 +94,7 @@ function updateStyles(
           "font-rotated": false,
         }));
       }
+      break;
     default:
       break;
   }
