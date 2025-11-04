@@ -1,4 +1,9 @@
-import React, { Dispatch, SetStateAction, useRef } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useLayoutEffect,
+  useRef,
+} from "react";
 import cn from "classnames";
 import { TextEditorProps } from ".";
 import { TextEditorOptions, TextStyles } from "../TextEditorOptions";
@@ -37,6 +42,34 @@ function updateStyles(
         return {
           ...prev,
           [`tracking-[${input.value}px]`]: true,
+        };
+      });
+      break;
+    case "scaleWidth":
+      setTextStyles((prev) => {
+        const oldStyleKey = Object.keys(prev).filter((key) =>
+          key.startsWith("scale-w-")
+        );
+        if (oldStyleKey.length > 0) {
+          delete prev[oldStyleKey[0]];
+        }
+        return {
+          ...prev,
+          [`scale-w-${input.value}`]: true,
+        };
+      });
+      break;
+    case "scaleHeight":
+      setTextStyles((prev) => {
+        const oldStyleKey = Object.keys(prev).filter((key) =>
+          key.startsWith("scale-h-")
+        );
+        if (oldStyleKey.length > 0) {
+          delete prev[oldStyleKey[0]];
+        }
+        return {
+          ...prev,
+          [`scale-h-${input.value}`]: true,
         };
       });
       break;
@@ -102,12 +135,35 @@ function updateStyles(
 
 /**
  * Main editor component with textarea and options
+ *
+ * Unfortunately, in order to apply transform-scale to the textarea, we must use
+ * a contenteditable div + an invisible input to handle the form data
  */
 function TextEditor({ id }: TextEditorProps) {
   const [textOptionStyles, setTextStyles] =
     React.useState<TextStyles>(initialStyles);
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const [containerStyles, setContainerStyles] = React.useState<TextStyles>({});
+  const textAreaRef = useRef<HTMLDivElement>(null);
+  const textAreaInputRef = useRef<HTMLTextAreaElement>(null);
   const defaultText = "hello printer";
+
+  useLayoutEffect(() => {
+    if (textAreaRef.current) {
+      const { height } = textAreaRef.current.getBoundingClientRect();
+      setContainerStyles((prev) => {
+        const oldStyleKey = Object.keys(prev).filter((key) =>
+          key.startsWith("h-")
+        );
+        if (oldStyleKey.length > 0) {
+          delete prev[oldStyleKey[0]];
+        }
+        return {
+          ...prev,
+          [`h-[${height}px]`]: true,
+        };
+      });
+    }
+  }, [textOptionStyles]);
 
   function onFormChange(e: React.FormEvent<HTMLFormElement>) {
     const target = e.target as HTMLElement;
@@ -117,28 +173,45 @@ function TextEditor({ id }: TextEditorProps) {
     updateStyles(targetId, input, setTextStyles);
   }
 
+  function onTextChange(e: any) {
+    if (textAreaInputRef.current) {
+      textAreaInputRef.current.value = e.target?.textContent;
+    }
+  }
+
   return (
     <section onChange={onFormChange}>
       <div className="md:flex md:gap-2">
         <div>
-          <label
+          <p
             className="block font-medium align-left mb-2"
-            htmlFor={`${id}-text`}
+            id={`${id}-text-label`}
           >
             Text to print:
-          </label>
-          <textarea
-            className={cn(
-              "resize-none w-[420px] break-all border border-gray-300 rounded-md p-1",
-              textOptionStyles
-            )}
-            id={`${id}-text`}
-            name={`${id}-text`}
-            rows={3}
-            cols={45}
-            defaultValue={defaultText}
-            ref={textAreaRef}
-          />
+          </p>
+          <div className={cn("w-[420px] mb-4", containerStyles)}>
+            <div
+              role="textbox"
+              aria-labelledby={`${id}-text-label`}
+              contentEditable={true}
+              suppressContentEditableWarning={true}
+              className={cn(
+                "resize-none break-all border border-gray-300 rounded-md p-1",
+                textOptionStyles
+              )}
+              ref={textAreaRef}
+              onInput={onTextChange}
+            >
+              {defaultText}
+            </div>
+            <textarea
+              className="hidden"
+              id={`${id}-text`}
+              name={`${id}-text`}
+              defaultValue={defaultText}
+              ref={textAreaInputRef}
+            ></textarea>
+          </div>
         </div>
         <TextEditorOptions id={id} />
       </div>

@@ -213,8 +213,8 @@ function TextEditorOptions({ id }: { id: string }) {
               name={`${id}-concat`}
               className="border border-gray-300 rounded-md p-1"
             >
-              <option value="space">Single space</option>
               <option value="newline">Newline</option>
+              <option value="space">Single space</option>
               <option value="nospace">No space</option>
             </select>
           </div>

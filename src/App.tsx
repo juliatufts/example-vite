@@ -89,36 +89,39 @@ function App() {
   };
 
   return (
-    <div>
-      <h1 className="text-center">Receipt Text</h1>
-      <p className="text-center">
-        A simple text editor for the RC receipt printer.
-      </p>
-      <div className="flex justify-center py-4 ">
-        <img
-          src={ollie}
-          className="h-16 w-16 m-4"
-          alt="Octopus emoji expressing excitement"
-        />
-        <div className="max-w-60">
-          <p>
-            Note that the editor preview will likely be slightly different than
-            the actual printed text!
-          </p>
+    <div className="flex flex-col min-h-[calc(100vh-24px)]">
+      <div className="grow">
+        <h1 className="text-center">Receipt Text</h1>
+        <p className="text-center">
+          A simple text editor for the RC receipt printer.
+        </p>
+        <div className="flex justify-center py-4 ">
+          <img
+            src={ollie}
+            className="h-16 w-16 m-4"
+            alt="Octopus emoji expressing excitement"
+          />
+          <div className="max-w-60">
+            <p>
+              <span className="visually-hidden">Warning: </span>
+              <span aria-hidden>⚠️</span> The editor preview will be slightly
+              different than the actual printed text!
+            </p>
+          </div>
         </div>
+        {token ? (
+          <Form onFormSubmit={onSubmit} />
+        ) : (
+          <div>
+            <p>
+              you are not authenticated.{" "}
+              <a href="https://receipt.recurse.com/login?redirect_uri=https://receipt-text.recurse.com">
+                log in to receipt printer API
+              </a>
+            </p>
+          </div>
+        )}
       </div>
-      {token ? (
-        <Form onFormSubmit={onSubmit} />
-      ) : (
-        <div>
-          <p>
-            you are not authenticated.{" "}
-            <a href="https://receipt.recurse.com/login?redirect_uri=https://receipt-text.recurse.com">
-              log in to receipt printer API
-            </a>
-          </p>
-        </div>
-      )}
       <footer className="flex justify-between mt-24 ">
         <Anchor href="https://github.com/juliatufts/receipt-text">
           View project on GitHub
