@@ -18,7 +18,7 @@ function TextEditor({ id }: TextEditorProps) {
   const [textOptionStyles, setTextStyles] =
     React.useState<TextStyles>(initialStyles);
   const [containerStyles, setContainerStyles] = React.useState<TextStyles>({});
-  const textAreaRef = useRef<HTMLDivElement>(null);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const defaultText = "hello printer";
 
   useLayoutEffect(() => {
@@ -67,6 +67,7 @@ function TextEditor({ id }: TextEditorProps) {
                 textOptionStyles
               )}
               defaultValue={defaultText}
+              ref={textAreaRef}
             ></textarea>
           </div>
         </div>
