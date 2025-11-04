@@ -67,6 +67,19 @@ function TextEditor({ id }: TextEditorProps) {
             Text to print:
           </p>
           <div className={cn("w-[420px] mb-4", containerStyles)}>
+            <textarea
+              role="textbox"
+              id={`${id}-text`}
+              name={`${id}-text`}
+              className={cn(
+                "resize-none break-all border border-gray-300 rounded-md p-1",
+                textOptionStyles
+              )}
+              onInput={onTextInputChange}
+              defaultValue={defaultText}
+            ></textarea>
+          </div>
+          {/* <div className={cn("w-[420px] mb-4", containerStyles)}>
             <div
               role="textbox"
               aria-labelledby={`${id}-text-label`}
@@ -88,7 +101,7 @@ function TextEditor({ id }: TextEditorProps) {
               defaultValue={defaultText}
               ref={textAreaInputRef}
             ></textarea>
-          </div>
+          </div> */}
         </div>
         <TextEditorOptions id={id} />
       </div>
