@@ -8,6 +8,7 @@ const initialStyles: TextStyles = {
   "dark:bg-white": true,
   "dark:text-black": true,
   "font-mono": true,
+  "scale-w-1": true,
 };
 
 /**

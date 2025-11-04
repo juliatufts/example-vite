@@ -27,6 +27,9 @@
     border: 0 !important;
   }
 
+  .scale-w-1 {
+    @apply w-full;
+  }
   .scale-w-2 {
     @apply scale-x-195 w-[51%] translate-x-[49%];
   }
