@@ -28,14 +28,12 @@ function getCookieValue(cookie: string): string {
 
 function App() {
   let endpoint = "https://receipt.recurse.com/textblocks";
-  // let endpoint = "http://receipt.local:4000/textblocks";
 
   if (import.meta.env.DEV) {
     document.cookie = "receipt_csrf=dev_token; path=/";
     endpoint = "http://localhost:3000/textblocks";
   }
   const token = getCookieValue(document.cookie);
-  // const token = "temp_cookie";
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
@@ -95,36 +93,38 @@ function App() {
         <p className="text-center">
           A simple text editor for the RC receipt printer.
         </p>
-        <div className="flex justify-center py-4 ">
-          <img
-            src={ollie}
-            className="h-16 w-16 m-4"
-            alt="Octopus emoji expressing excitement"
-          />
-          <div className="max-w-60">
-            <p>
-              <span className="visually-hidden">Warning: </span>
-              <span aria-hidden>⚠️</span> The editor preview will be slightly
-              different than the actual printed text!
-            </p>
-          </div>
-        </div>
         {token ? (
-          <Form onFormSubmit={onSubmit} />
+          <>
+            <div className="flex justify-center py-4 ">
+              <img
+                src={ollie}
+                className="h-16 w-16 mx-4"
+                alt="Octopus emoji expressing excitement"
+              />
+              <div className="max-w-60">
+                <p>
+                  <span className="visually-hidden">Warning: </span>
+                  <span aria-hidden>⚠️</span> The editor preview will be
+                  slightly different than the actual printed text!
+                </p>
+              </div>
+            </div>
+            <Form onFormSubmit={onSubmit} />
+          </>
         ) : (
-          <div>
+          <div className="text-center mt-10">
+            <p>you are not authenticated.</p>
             <p>
-              you are not authenticated.{" "}
-              <a href="https://receipt.recurse.com/login?redirect_uri=https://receipt-text.recurse.com">
-                log in to receipt printer API
-              </a>
+              <Anchor href="https://receipt.recurse.com/login?redirect_uri=https://receipt-text.recurse.com">
+                log in to the receipt printer API
+              </Anchor>
             </p>
           </div>
         )}
       </div>
       <footer className="flex justify-between mt-24 ">
         <Anchor href="https://github.com/juliatufts/receipt-text">
-          View project on GitHub
+          View on GitHub
         </Anchor>
         <Anchor href="https://receipt.recurse.com/">Receipt Printer API</Anchor>
       </footer>

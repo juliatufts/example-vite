@@ -3,7 +3,6 @@ import { TextBlock, TextEditor } from "../TextEditor";
 import Button from "../Button";
 import { swapArrayElements } from "../../utils";
 
-// Form Context
 interface FormContextType {
   textBlocks: TextBlock[];
   addTextBlock: (index: number) => void;
@@ -24,7 +23,6 @@ export const FormContext = createContext({
   moveBlockUp: (_: number) => {},
 } as FormContextType);
 
-// Form Props
 interface FormProps {
   onFormSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
