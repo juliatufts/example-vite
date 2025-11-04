@@ -27,7 +27,7 @@ function getCookieValue(cookie: string): string {
 }
 
 function App() {
-  let endpoint = "https://receipt.recurse.com/textblocks";
+  let endpoint = "https://receipt.recurse.com/text";
 
   if (import.meta.env.DEV) {
     document.cookie = "receipt_csrf=dev_token; path=/";
@@ -69,7 +69,7 @@ function App() {
     try {
       const response = await fetch(endpoint, {
         method: "POST",
-        body: JSON.stringify({ textblocks }),
+        body: JSON.stringify({ text: textblocks[0].text }),
         credentials: "include",
         headers: { "X-CSRF-Token": token, "Content-Type": "application/json" },
       });
