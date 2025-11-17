@@ -8,13 +8,11 @@ interface TextReceiptData {
   underline?: boolean;
   bold?: boolean;
   font?: "a" | "b";
-  upsideDown?: boolean;
   invert?: boolean;
-  rotate?: boolean;
   letterSpacing?: number;
   scaleWidth?: number;
   scaleHeight?: number;
-  concat?: string;
+  coda?: string;
 }
 
 function getCookieValue(cookie: string): string {
@@ -27,11 +25,11 @@ function getCookieValue(cookie: string): string {
 }
 
 function App() {
-  let endpoint = "https://receipt.recurse.com/textblocks";
+  let endpoint = "https://receipt.recurse.com/text";
 
   if (import.meta.env.DEV) {
     document.cookie = "receipt_csrf=dev_token; path=/";
-    endpoint = "http://localhost:3000/textblocks";
+    endpoint = "http://localhost:3000/text";
   }
   const token = getCookieValue(document.cookie);
 
@@ -42,15 +40,10 @@ function App() {
     let currentOptions = {};
     const textblocks: TextReceiptData[] = [];
 
-    // batch form data into textblocks grouped by id
+    // group form data by id
     for (const pair of formData.entries()) {
       const [id, optionName] = pair[0].split("-", 2);
       let optionValue = pair[1];
-
-      // scale is displayed 1-8 for human readability but API expects 0-7 range
-      if (optionName === "scaleWidth" || optionName === "scaleHeight") {
-        optionValue = (Number(optionValue) - 1).toString();
-      }
 
       if (currentId === id) {
         currentOptions = { ...currentOptions, [optionName]: optionValue };
@@ -62,23 +55,32 @@ function App() {
       }
     }
 
-    // last text block cuts the paper
-    currentOptions = { ...currentOptions, concat: "cut" };
+    // last text call cuts the paper
+    currentOptions = { ...currentOptions, coda: "cut" };
     textblocks.push(currentOptions);
 
     try {
-      const response = await fetch(endpoint, {
-        method: "POST",
-        body: JSON.stringify({ textblocks }),
-        credentials: "include",
-        headers: { "X-CSRF-Token": token, "Content-Type": "application/json" },
-      });
+      const promises = textblocks.map((block) =>
+        fetch(endpoint, {
+          method: "POST",
+          body: JSON.stringify({ text: [block] }),
+          credentials: "include",
+          headers: {
+            "X-CSRF-Token": token,
+            "Content-Type": "application/json",
+          },
+        })
+      );
 
-      if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
+      const response = await Promise.all(promises);
+      const lastResponse = response[response.length - 1];
+
+      const failedResponses = response.filter((r) => !r.ok);
+      if (failedResponses.length > 0) {
+        throw new Error(`Response status: ${failedResponses[0].status}`);
       }
 
-      const result = await response.json();
+      const result = await lastResponse.json();
       console.log(result);
     } catch (error) {
       let err = error as Error;

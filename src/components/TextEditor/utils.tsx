@@ -74,13 +74,6 @@ export function updateStyles(
         setTextStyles((prev) => ({ ...prev, underline: false }));
       }
       break;
-    case "upsideDown":
-      if (isChecked) {
-        setTextStyles((prev) => ({ ...prev, "rotate-180": true }));
-      } else {
-        setTextStyles((prev) => ({ ...prev, "rotate-180": false }));
-      }
-      break;
     case "invert":
       if (isChecked) {
         setTextStyles((prev) => ({
@@ -97,21 +90,6 @@ export function updateStyles(
           "bg-black": false,
           "dark:bg-white": true,
           "dark:text-black": true,
-        }));
-      }
-      break;
-    case "rotate":
-      if (isChecked) {
-        setTextStyles((prev) => ({
-          ...prev,
-          "font-mono": false,
-          "font-rotated": true,
-        }));
-      } else {
-        setTextStyles((prev) => ({
-          ...prev,
-          "font-mono": true,
-          "font-rotated": false,
         }));
       }
       break;

@@ -133,28 +133,10 @@ function TextEditorOptions({ id }: { id: string }) {
                   <input
                     className="mr-2"
                     type="checkbox"
-                    id={`${id}-upsideDown`}
-                    name={`${id}-upsideDown`}
-                  />
-                  <label htmlFor={`${id}-upsideDown`}>Upside Down</label>
-                </div>
-                <div>
-                  <input
-                    className="mr-2"
-                    type="checkbox"
                     id={`${id}-invert`}
                     name={`${id}-invert`}
                   />
                   <label htmlFor={`${id}-invert`}>Invert Color</label>
-                </div>
-                <div>
-                  <input
-                    className="mr-2"
-                    type="checkbox"
-                    id={`${id}-rotate`}
-                    name={`${id}-rotate`}
-                  />
-                  <label htmlFor={`${id}-rotate`}>Rotate 90</label>
                 </div>
               </div>
             </div>
@@ -205,17 +187,17 @@ function TextEditorOptions({ id }: { id: string }) {
         )}
         {isNotTheLastBlock && (
           <div>
-            <label htmlFor={`${id}-concat`} className="mr-2">
+            <label htmlFor={`${id}-coda`} className="mr-2">
               Connect with:
             </label>
             <select
-              id={`${id}-concat`}
-              name={`${id}-concat`}
+              id={`${id}-coda`}
+              name={`${id}-coda`}
               className="border border-gray-300 rounded-md p-1"
             >
               <option value="newline">Newline</option>
               <option value="space">Single space</option>
-              <option value="nospace">No space</option>
+              <option value="none">No space</option>
             </select>
           </div>
         )}
