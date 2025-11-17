@@ -46,10 +46,19 @@ function App() {
       let optionValue = pair[1];
 
       if (currentId === id) {
+        if (optionName === "spacing") {
+          // skip spacing for now
+          continue;
+        }
         currentOptions = { ...currentOptions, [optionName]: optionValue };
       } else {
         if (Object.keys(currentOptions).length > 0)
           textblocks.push(currentOptions);
+        if (optionName === "spacing") {
+          // skip spacing for now
+          currentOptions = {};
+          continue;
+        }
         currentOptions = { [optionName]: optionValue };
         currentId = id;
       }
