@@ -46,20 +46,20 @@ function App() {
       let optionValue = pair[1];
 
       if (currentId === id) {
-        // if (optionName === "spacing") {
-        //   // TODO: remove once spacing is fixed
-        //   continue;
-        // }
+        if (optionName === "spacing") {
+          // TODO: remove once spacing is fixed
+          continue;
+        }
         currentOptions = { ...currentOptions, [optionName]: optionValue };
       } else {
         if (Object.keys(currentOptions).length > 0)
           textblocks.push(currentOptions);
-        // if (optionName === "spacing") {
-        //   // TODO: remove once spacing is fixed
-        //   currentOptions = {};
-        //   currentId = id;
-        //   continue;
-        // }
+        if (optionName === "spacing") {
+          // TODO: remove once spacing is fixed
+          currentOptions = {};
+          currentId = id;
+          continue;
+        }
         currentOptions = { [optionName]: optionValue };
         currentId = id;
       }
