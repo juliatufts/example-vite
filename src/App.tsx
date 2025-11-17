@@ -63,7 +63,7 @@ function App() {
       const promises = textblocks.map((block) =>
         fetch(endpoint, {
           method: "POST",
-          body: JSON.stringify({ text: [block] }),
+          body: JSON.stringify({ ...block }),
           credentials: "include",
           headers: {
             "X-CSRF-Token": token,
