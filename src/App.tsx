@@ -47,7 +47,7 @@ function App() {
 
       if (currentId === id) {
         if (optionName === "spacing") {
-          // skip spacing for now
+          // TODO: remove once spacing is fixed
           continue;
         }
         currentOptions = { ...currentOptions, [optionName]: optionValue };
@@ -55,8 +55,9 @@ function App() {
         if (Object.keys(currentOptions).length > 0)
           textblocks.push(currentOptions);
         if (optionName === "spacing") {
-          // skip spacing for now
+          // TODO: remove once spacing is fixed
           currentOptions = {};
+          currentId = id;
           continue;
         }
         currentOptions = { [optionName]: optionValue };
@@ -68,9 +69,11 @@ function App() {
     currentOptions = { ...currentOptions, coda: "cut" };
     textblocks.push(currentOptions);
 
+    // TODO: fix spacing
     try {
-      const promises = textblocks.map((block) =>
-        fetch(endpoint, {
+      let response;
+      for (const block of textblocks) {
+        response = await fetch(endpoint, {
           method: "POST",
           body: JSON.stringify({ ...block }),
           credentials: "include",
@@ -78,18 +81,14 @@ function App() {
             "X-CSRF-Token": token,
             "Content-Type": "application/json",
           },
-        })
-      );
+        });
 
-      const response = await Promise.all(promises);
-      const lastResponse = response[response.length - 1];
-
-      const failedResponses = response.filter((r) => !r.ok);
-      if (failedResponses.length > 0) {
-        throw new Error(`Response status: ${failedResponses[0].status}`);
+        if (!response.ok) {
+          throw new Error(`Response status: ${response.status}`);
+        }
       }
 
-      const result = await lastResponse.json();
+      const result = await response?.json();
       console.log(result);
     } catch (error) {
       let err = error as Error;
