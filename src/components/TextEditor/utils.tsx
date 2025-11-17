@@ -18,7 +18,7 @@ export function updateStyles(
         setTextStyles((prev) => ({ ...prev, "text-xs": true }));
       }
       break;
-    case "letterSpacing":
+    case "spacing":
       setTextStyles((prev) => {
         const oldStyleKey = Object.keys(prev).filter((key) =>
           key.startsWith("tracking-")

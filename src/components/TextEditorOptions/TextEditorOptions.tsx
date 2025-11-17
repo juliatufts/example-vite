@@ -65,7 +65,7 @@ function TextEditorOptions({ id }: { id: string }) {
               </div>
             </fieldset>
             <div className="my-2">
-              <label htmlFor={`${id}-letterSpacing`} className="mr-2">
+              <label htmlFor={`${id}-spacing`} className="mr-2">
                 Letter Spacing:
               </label>
               <input
@@ -73,8 +73,8 @@ function TextEditorOptions({ id }: { id: string }) {
                 defaultValue={0}
                 min={0}
                 max={255}
-                id={`${id}-letterSpacing`}
-                name={`${id}-letterSpacing`}
+                id={`${id}-spacing`}
+                name={`${id}-spacing`}
                 className="w-16 border border-gray-300 rounded-md p-1"
               />
             </div>
